@@ -23,7 +23,10 @@ public class Server{
 		BufferedImage screenShot = robot.createScreenCapture(sharedScreen);
 		InputStream is = socket.getInputStream();
 		OutputStream os = socket.getOutputStream();
-		ImageIO.write(screenShot, "PNG", os);
+		while(!done){
+			ImageIO.write(screenShot, "PNG", os);
+			screenShot = robot.createScreenCapture(sharedScreen);
+		}
 		socket.close();
 	}
 
