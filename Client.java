@@ -9,8 +9,11 @@ import javax.imageio.ImageIO;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
+import java.util.Date;
+
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.io.ObjectInputStream;
 import java.io.IOException;
 
 public class Client{
@@ -18,32 +21,26 @@ public class Client{
 		boolean done = false;
 		String serverIP = "localhost";
 		int port = 7117;
-		InetSocketAddress socketAddress = 
-			new InetSocketAddress(serverIP,port);
-		Socket socket = new Socket();
-		socket.connect(socketAddress);
-		InputStream is = socket.getInputStream();
-		OutputStream os = socket.getOutputStream();
+		Socket socket;
 		JFrame mainFrame = new JFrame();
 		mainFrame.setSize(800,600);
 		mainFrame.setLayout(new BorderLayout());
-		JPanel imagePanel = new JPanel(){
-			@Override
-			protected void paintComponent(Graphics g){
-				super.paintComponent(g);
-				try{
-					g.drawImage(ImageIO.read(is),0,0,this);
-				}catch(Exception e){}
-			}
-		};
+		ImagePanel imagePanel = new ImagePanel();
 		imagePanel.setSize(800,600);
 		mainFrame.add(imagePanel);
 		mainFrame.setVisible(true);
 		mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		while(!done){
-			Thread.sleep(1000);
-			imagePanel.repaint();
-		}
-		socket.close();
+		try{
+			while(!done){
+				socket = new Socket(serverIP,port);
+				InputStream is = socket.getInputStream();
+				OutputStream os = socket.getOutputStream();
+				ObjectInputStream ois = new ObjectInputStream(is);
+				BufferedImage image = ImageIO.read(ois);
+				imagePanel.setImage(image);
+				imagePanel.repaint();
+				socket.close();
+			}
+		}catch(IOException e){}
 	}
 }

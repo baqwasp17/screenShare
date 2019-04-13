@@ -9,6 +9,7 @@ import javax.imageio.ImageIO;
 
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.io.ObjectOutputStream;
 import java.io.IOException;
 
 public class Server{
@@ -19,15 +20,15 @@ public class Server{
 			new Rectangle(Toolkit.getDefaultToolkit().getScreenSize());
 		Robot robot = new Robot();
 		ServerSocket serverSocket = new ServerSocket(port);
-		Socket socket = serverSocket.accept();
-		BufferedImage screenShot = robot.createScreenCapture(sharedScreen);
-		InputStream is = socket.getInputStream();
-		OutputStream os = socket.getOutputStream();
 		while(!done){
-			ImageIO.write(screenShot, "PNG", os);
-			screenShot = robot.createScreenCapture(sharedScreen);
+			Socket socket = serverSocket.accept();
+			BufferedImage screenShot = robot.createScreenCapture(sharedScreen);
+			InputStream is = socket.getInputStream();
+			OutputStream os = socket.getOutputStream();
+			ObjectOutputStream oos = new ObjectOutputStream(os);
+			ImageIO.write(screenShot, "JPG", oos);
+			socket.close();
 		}
-		socket.close();
 	}
 
 }
