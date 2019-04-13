@@ -11,7 +11,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.IOException;
 
-public class Server{
+public class Server2{
 	public static void main(String args[])throws Exception{
 		int port = 7117;
 		boolean done = false;
@@ -24,7 +24,7 @@ public class Server{
 		InputStream is = socket.getInputStream();
 		OutputStream os = socket.getOutputStream();
 		while(!done){
-			ImageIO.write(screenShot, "PNG", os);
+			ImageIO.write(screenShot, "BMP", os);
 			screenShot = robot.createScreenCapture(sharedScreen);
 		}
 		socket.close();

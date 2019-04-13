@@ -41,7 +41,7 @@ public class Client{
 		mainFrame.setVisible(true);
 		mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		while(!done){
-			Thread.sleep(1000);
+			//Thread.sleep(1000);
 			imagePanel.repaint();
 		}
 		socket.close();
